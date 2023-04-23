@@ -21,7 +21,6 @@ app.use(userId);
 app.use('/users', userRouter);
 
 app.use('/cards', cardRouter);
-
 //  ERROR MIDDLEWARE
 app.use(errorHandler);
 
