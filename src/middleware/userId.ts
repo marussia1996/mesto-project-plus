@@ -3,7 +3,7 @@ import { IRequestCustom } from '../types/reqType';
 
 export const userId = (req: IRequestCustom, res: Response, next: NextFunction) => {
   req.user = {
-    _id: '644148a555e1712067d82d2f',
+    _id: '644502eeb9abb2717ee8ca50',
   };
   next();
 };
