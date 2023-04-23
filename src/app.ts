@@ -1,9 +1,6 @@
 import mongoose from 'mongoose';
 import express from 'express';
-import { userId } from './middleware/userId';
-import userRouter from './routes/users';
-import cardRouter from './routes/cards';
-import errorHandler from './middleware/error';
+import indexRouter from './routes/index';
 
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -16,12 +13,6 @@ mongoose.connect('mongodb://127.0.0.1:27017/mestodb', {
   autoCreate: true,
 });
 
-app.use(userId);
-
-app.use('/users', userRouter);
-
-app.use('/cards', cardRouter);
-//  ERROR MIDDLEWARE
-app.use(errorHandler);
+app.use(indexRouter);
 
 app.listen(PORT);

@@ -1,7 +1,7 @@
 import { NextFunction, Response } from 'express';
 import { IRequestCustom } from '../types/reqType';
 
-export const userId = (req: IRequestCustom, res: Response, next: NextFunction) => {
+const userId = (req: IRequestCustom, res: Response, next: NextFunction) => {
   req.user = {
     _id: '644502eeb9abb2717ee8ca50',
   };
