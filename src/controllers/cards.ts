@@ -9,12 +9,17 @@ export const getCards = (req: Request, res: Response, next: NextFunction) => Car
     next(err);
   });
 
-export const createCard = async (req: IRequestCustom, res: Response, next: NextFunction) => {
+export const createCard = (req: IRequestCustom, res: Response, next: NextFunction) => {
   const { name, link } = req.body;
   const id = req.user?._id;
-  const newCard = await Card.create({ name, link, owner: id });
-  return newCard.populate('owner')
-    .then((card) => res.status(201).send(card))
+  return Card.create({ name, link, owner: id })
+    .then((card) => {
+      if (!card) {
+        res.status(400).send({ message: 'Переданы некорректные данные' });
+      } else {
+        res.status(201).send(card);
+      }
+    })
     .catch((err) => {
       next(err);
     });
@@ -23,7 +28,13 @@ export const createCard = async (req: IRequestCustom, res: Response, next: NextF
 export const deleteCard = (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
   return Card.findByIdAndDelete(id)
-    .then(() => res.status(200).send({ message: 'Пост удалён' }))
+    .then((card) => {
+      if (!card) {
+        res.status(404).send({ message: 'Карточка по указанному _id не найден' });
+      } else {
+        res.status(200).send({ message: 'Пост удалён' });
+      }
+    })
     .catch((err) => {
       next(err);
     });
@@ -39,7 +50,13 @@ export const likeCard = (
   { new: true },
 )
   .populate(['owner', 'likes'])
-  .then((card) => res.status(200).send(card))
+  .then((card) => {
+    if (!card) {
+      res.status(404).send({ message: 'Карточка по указанному _id не найден' });
+    } else {
+      res.status(200).send(card);
+    }
+  })
   .catch((err) => {
     next(err);
   });
@@ -54,7 +71,13 @@ export const dislikeCard = (
   { new: true },
 )
   .populate(['owner', 'likes'])
-  .then((card) => res.send(card))
+  .then((card) => {
+    if (!card) {
+      res.status(404).send({ message: 'Карточка по указанному _id не найден' });
+    } else {
+      res.status(200).send(card);
+    }
+  })
   .catch((err) => {
     next(err);
   });
