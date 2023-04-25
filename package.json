@@ -1,7 +1,7 @@
 {
   "name": "mestoapi",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
     "lint": "npx eslint src/**/*.ts",
     "build": "tsc --build",

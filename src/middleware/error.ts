@@ -1,18 +1,19 @@
+/* eslint-disable no-param-reassign */
 import { NextFunction, Request, Response } from 'express';
 import ErrorResponse from '../utils/errorResponse';
+import { BAD_REQUEST_CODE, NOT_FOUND_CODE, SERVER_ERROR } from '../constants/error';
 
 const errorHandler = (err: ErrorResponse, req: Request, res:Response, next: NextFunction) => {
-  let error = { ...err };
   if (err.name === 'CastError') {
-    const message = 'Пользователь/Карточка по указанному _id не найден';
-    error = new ErrorResponse(message, 404);
+    const message = 'Ошибка валидации. Невалидный _id';
+    err = new ErrorResponse(message, NOT_FOUND_CODE);
   }
   if (err.name === 'ValidationError') {
-    const message = 'Переданы некорректные данные при создании/обновлении пользователя';
-    error = new ErrorResponse(message, 400);
+    const message = 'Переданы некорректные данные при создании/обновлении данных';
+    err = new ErrorResponse(message, BAD_REQUEST_CODE);
   }
-  res.status(error.statusCode || 500).json({
-    message: error.message || 'Ошибка сервера',
+  res.status(err.statusCode || SERVER_ERROR).json({
+    message: err.message || 'Ошибка сервера',
   });
   next();
 };
