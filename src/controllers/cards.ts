@@ -2,11 +2,11 @@ import { Request, Response, NextFunction } from 'express';
 import { IRequestCustom } from '../types/reqType';
 import Card from '../models/card';
 import ErrorResponse from '../utils/errorResponse';
-import { CREATED_CODE, NOT_FOUND_CODE, OK } from '../constants/error';
+import { CREATED_CODE, NOT_FOUND_CODE } from '../constants/statusCode';
 
 export const getCards = (req: Request, res: Response, next: NextFunction) => Card.find({})
   .populate(['owner', 'likes']) //  чтобы получить всю информацию о создателе
-  .then((cards) => res.status(OK).send(cards))
+  .then((cards) => res.status(200).send(cards))
   .catch((err) => {
     next(err);
   });
@@ -28,7 +28,7 @@ export const deleteCard = (req: Request, res: Response, next: NextFunction) => {
   return Card.findByIdAndDelete(id)
     .orFail(() => new ErrorResponse('Карточка по указанному _id не найдена', NOT_FOUND_CODE))
     .then(() => {
-      res.status(OK).send({ message: 'Пост удалён' });
+      res.status(200).send({ message: 'Пост удалён' });
     })
     .catch((err) => {
       next(err);
@@ -47,7 +47,7 @@ export const likeCard = (
   .orFail(() => new ErrorResponse('Карточка по указанному _id не найдена', NOT_FOUND_CODE))
   .populate(['owner', 'likes'])
   .then((card) => {
-    res.status(OK).send(card);
+    res.status(200).send(card);
   })
   .catch((err) => {
     next(err);
@@ -65,7 +65,7 @@ export const dislikeCard = (
   .orFail(() => new ErrorResponse('Карточка по указанному _id не найдена', NOT_FOUND_CODE))
   .populate(['owner', 'likes'])
   .then((card) => {
-    res.status(OK).send(card);
+    res.status(200).send(card);
   })
   .catch((err) => {
     next(err);
