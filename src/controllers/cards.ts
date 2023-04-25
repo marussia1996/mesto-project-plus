@@ -6,7 +6,7 @@ import { CREATED_CODE, NOT_FOUND_CODE } from '../constants/statusCode';
 
 export const getCards = (req: Request, res: Response, next: NextFunction) => Card.find({})
   .populate(['owner', 'likes']) //  чтобы получить всю информацию о создателе
-  .then((cards) => res.status(200).send(cards))
+  .then((cards) => res.send(cards))
   .catch((err) => {
     next(err);
   });
@@ -28,7 +28,7 @@ export const deleteCard = (req: Request, res: Response, next: NextFunction) => {
   return Card.findByIdAndDelete(id)
     .orFail(() => new ErrorResponse('Карточка по указанному _id не найдена', NOT_FOUND_CODE))
     .then(() => {
-      res.status(200).send({ message: 'Пост удалён' });
+      res.send({ message: 'Пост удалён' });
     })
     .catch((err) => {
       next(err);
@@ -47,7 +47,7 @@ export const likeCard = (
   .orFail(() => new ErrorResponse('Карточка по указанному _id не найдена', NOT_FOUND_CODE))
   .populate(['owner', 'likes'])
   .then((card) => {
-    res.status(200).send(card);
+    res.send(card);
   })
   .catch((err) => {
     next(err);
@@ -65,7 +65,7 @@ export const dislikeCard = (
   .orFail(() => new ErrorResponse('Карточка по указанному _id не найдена', NOT_FOUND_CODE))
   .populate(['owner', 'likes'])
   .then((card) => {
-    res.status(200).send(card);
+    res.send(card);
   })
   .catch((err) => {
     next(err);

@@ -5,7 +5,7 @@ import ErrorResponse from '../utils/errorResponse';
 import { CREATED_CODE, NOT_FOUND_CODE } from '../constants/statusCode';
 
 export const getUsers = (req: Request, res: Response, next: NextFunction) => User.find({})
-  .then((users) => res.status(200).send(users))
+  .then((users) => res.send(users))
   .catch((err) => next(err));
 
 export const createUser = (req: Request, res: Response, next: NextFunction) => {
@@ -22,7 +22,7 @@ export const getUserById = (req: Request, res: Response, next: NextFunction) => 
   return User.findById(id)
     .orFail(() => new ErrorResponse('Пользователь по указанному _id не найден', NOT_FOUND_CODE))
     .then((user) => {
-      res.status(200).send(user);
+      res.send(user);
     })
     .catch((err) => {
       next(err);
@@ -34,7 +34,7 @@ export const updateProfile = (req: IRequestCustom, res: Response, next: NextFunc
   return User.findByIdAndUpdate(req.user?._id, { name, about }, { new: true, runValidators: true })
     .orFail(() => new ErrorResponse('Пользователь по указанному _id не найден', NOT_FOUND_CODE))
     .then((user) => {
-      res.status(200).send(user);
+      res.send(user);
     })
     .catch((err) => {
       next(err);
@@ -46,7 +46,7 @@ export const updateAvatar = (req: IRequestCustom, res: Response, next: NextFunct
   return User.findByIdAndUpdate(req.user?._id, { avatar }, { new: true, runValidators: true })
     .orFail(() => new ErrorResponse('Пользователь по указанному _id не найден', NOT_FOUND_CODE))
     .then((user) => {
-      res.status(200).send(user);
+      res.send(user);
     })
     .catch((err) => {
       next(err);
