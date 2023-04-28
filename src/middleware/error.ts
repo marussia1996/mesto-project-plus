@@ -1,11 +1,12 @@
 import { NextFunction, Request, Response } from 'express';
 import ErrorResponse from '../utils/errorResponse';
 import { BAD_REQUEST_CODE, NOT_FOUND_CODE, SERVER_ERROR } from '../constants/statusCode';
-import mongoose, { MongooseError } from 'mongoose';
+import mongoose from 'mongoose';
 
 const errorHandler = (err: ErrorResponse, req: Request, res:Response, next: NextFunction) => {
   // Эта переменная нужна, чтобы можно было достать имя ошибки + переназначить ошибке текст и статус
   let error = err;
+
   if(err instanceof mongoose.Error.CastError){
     const message = 'Ошибка валидации. Невалидный _id';
     error = new ErrorResponse(message, NOT_FOUND_CODE);
