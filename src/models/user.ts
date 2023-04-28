@@ -1,6 +1,6 @@
 import mongoose, { Document, Model, Schema } from 'mongoose';
 import validator from 'validator';
-import bcrypt from 'bcryptjs' ;
+import bcrypt from 'bcryptjs';
 
 interface IUser {
   name: string;

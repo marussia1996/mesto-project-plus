@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
+import bcrypt from 'bcryptjs';
 import { IRequestCustom } from '../types/reqType';
 import User from '../models/user';
 import ErrorResponse from '../utils/errorResponse';
@@ -9,12 +10,19 @@ export const getUsers = (req: Request, res: Response, next: NextFunction) => Use
   .catch((err) => next(err));
 
 export const createUser = (req: Request, res: Response, next: NextFunction) => {
-  const { name, about, avatar } = req.body;
-  return User.create({ name, about, avatar })
-    .then((user) => res.status(CREATED_CODE).send(user))
-    .catch((err) => {
-      next(err);
-    });
+  const { name, about, avatar, email } = req.body;
+  bcrypt.hash(req.body.password, 10)
+  .then((hash: string) => User.create({
+    name,
+    about,
+    avatar,
+    email,
+    password: hash,
+  }))
+  .then((user) => res.status(CREATED_CODE).send(user))
+  .catch((err) => {
+    next(err);
+  });
 };
 
 export const getUserById = (req: Request, res: Response, next: NextFunction) => {
