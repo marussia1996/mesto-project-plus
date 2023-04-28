@@ -64,4 +64,4 @@ userSchema.static('findUserByCredentials', function findUserByCredentials(email:
   });
 });
 
-export default mongoose.model('user', userSchema);
+export default mongoose.model<IUser, UserModel>('User', userSchema);

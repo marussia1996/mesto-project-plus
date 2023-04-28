@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 import { IRequestCustom } from '../types/reqType';
 import User from '../models/user';
 import ErrorResponse from '../utils/errorResponse';
@@ -25,6 +26,18 @@ export const createUser = (req: Request, res: Response, next: NextFunction) => {
   });
 };
 
+export const login = (req: Request, res: Response, next: NextFunction) => {
+  const { email, password } = req.body;
+  return User.findUserByCredentials(email, password)
+    .then((user) => {
+      res.send({
+        token: jwt.sign({ _id: user._id }, 'super-strong-secret', {expiresIn: '7d'}),
+      });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
 export const getUserById = (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
   return User.findById(id)
