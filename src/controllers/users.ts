@@ -38,6 +38,17 @@ export const login = (req: Request, res: Response, next: NextFunction) => {
       next(err);
     });
 };
+
+export const getCurUser = (req: IRequestCustom, res: Response, next: NextFunction) => {
+  return User.findById(req.user?._id)
+    .orFail(() => new ErrorResponse('Пользователь по указанному _id не найден', NOT_FOUND_CODE))
+    .then((user) => {
+      res.send(user);
+    })
+    .catch((err) => {
+      next(err);
+    });
+}
 export const getUserById = (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
   return User.findById(id)
