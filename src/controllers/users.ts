@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import { IRequestCustom } from '../types/reqType';
 import User from '../models/user';
 import ErrorResponse from '../utils/errorResponse';
-import { CREATED_CODE, NOT_FOUND_CODE } from '../constants/statusCode';
+import { CONFLICT_CODE, CREATED_CODE, NOT_FOUND_CODE } from '../constants/statusCode';
 
 export const getUsers = (req: Request, res: Response, next: NextFunction) => User.find({})
   .then((users) => res.send(users))
@@ -22,6 +22,9 @@ export const createUser = (req: Request, res: Response, next: NextFunction) => {
   }))
   .then((user) => res.status(CREATED_CODE).send(user))
   .catch((err) => {
+    if(err.code === 11000){
+      res.status(CONFLICT_CODE).send({message: "Пользователь с переданным email уже существует"})
+    }
     next(err);
   });
 };
