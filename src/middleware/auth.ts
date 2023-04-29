@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 
-interface SessionRequest extends Request {
+export interface SessionRequest extends Request {
     user?: string | JwtPayload;
 }
 
@@ -31,7 +31,7 @@ export default (req: SessionRequest, res: Response, next: NextFunction) => {
     return handleAuthError(res);
   }
 
-  req.user = payload; // записываем пейлоуд в объект запроса
+  req.user = payload as { _id: JwtPayload }; // записываем пейлоуд в объект запроса
 
   next(); // пропускаем запрос дальше
 };

@@ -5,6 +5,7 @@ import { IRequestCustom } from '../types/reqType';
 import User from '../models/user';
 import ErrorResponse from '../utils/errorResponse';
 import { CONFLICT_CODE, CREATED_CODE, NOT_FOUND_CODE } from '../constants/statusCode';
+import { SessionRequest } from 'middleware/auth';
 
 export const getUsers = (req: Request, res: Response, next: NextFunction) => User.find({})
   .then((users) => res.send(users))
@@ -43,6 +44,8 @@ export const login = (req: Request, res: Response, next: NextFunction) => {
 };
 
 export const getCurUser = (req: IRequestCustom, res: Response, next: NextFunction) => {
+  res.send(req.user?._id);
+  console.log("qwert")
   return User.findById(req.user?._id)
     .orFail(() => new ErrorResponse('Пользователь по указанному _id не найден', NOT_FOUND_CODE))
     .then((user) => {
@@ -51,7 +54,8 @@ export const getCurUser = (req: IRequestCustom, res: Response, next: NextFunctio
     .catch((err) => {
       next(err);
     });
-}
+};
+
 export const getUserById = (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
   return User.findById(id)
@@ -66,6 +70,7 @@ export const getUserById = (req: Request, res: Response, next: NextFunction) => 
 
 export const updateProfile = (req: IRequestCustom, res: Response, next: NextFunction) => {
   const { name, about } = req.body;
+
   return User.findByIdAndUpdate(req.user?._id, { name, about }, { new: true, runValidators: true })
     .orFail(() => new ErrorResponse('Пользователь по указанному _id не найден', NOT_FOUND_CODE))
     .then((user) => {

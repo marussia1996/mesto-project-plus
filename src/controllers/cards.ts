@@ -13,8 +13,7 @@ export const getCards = (req: Request, res: Response, next: NextFunction) => Car
 
 export const createCard = (req: IRequestCustom, res: Response, next: NextFunction) => {
   const { name, link } = req.body;
-  const id = req.user?._id;
-  return Card.create({ name, link, owner: id })
+  return Card.create({ name, link, owner: req.user?._id})
     .then((card) => {
       res.status(CREATED_CODE).send(card);
     })

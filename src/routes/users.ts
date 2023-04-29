@@ -9,7 +9,7 @@ userRouter.get('/', getUsers);
 
 userRouter.get('/:id', getUserById);
 
-userRouter.get('/me', getCurUser)
+userRouter.get('/me', getCurUser);
 
 userRouter.patch('/me', updateProfile);
 
