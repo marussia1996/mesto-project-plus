@@ -44,8 +44,6 @@ export const login = (req: Request, res: Response, next: NextFunction) => {
 };
 
 export const getCurUser = (req: IRequestCustom, res: Response, next: NextFunction) => {
-  res.send(req.user?._id);
-  console.log("qwert")
   return User.findById(req.user?._id)
     .orFail(() => new ErrorResponse('Пользователь по указанному _id не найден', NOT_FOUND_CODE))
     .then((user) => {

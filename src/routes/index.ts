@@ -1,8 +1,6 @@
 import { Router } from 'express';
 import userRouter from './users';
 import cardRouter from './cards';
-import errorHandler from '../middleware/error';
-import auth from '../middleware/auth';
 
 const indexRouter = Router();
 

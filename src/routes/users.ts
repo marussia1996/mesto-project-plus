@@ -7,9 +7,9 @@ const userRouter = Router();
 
 userRouter.get('/', getUsers);
 
-userRouter.get('/:id', getUserById);
-
 userRouter.get('/me', getCurUser);
+
+userRouter.get('/:id', getUserById);
 
 userRouter.patch('/me', updateProfile);
 
