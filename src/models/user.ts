@@ -17,20 +17,20 @@ const userSchema = new Schema<IUser, UserModel>({
     type: String,
     minlength: 2,
     maxlength: 30,
-    default: "Жак-Ив Кусто",
+    default: 'Жак-Ив Кусто',
   },
   about: {
     type: String,
     minlength: 2,
     maxlength: 200,
-    default: "Исследователь",
+    default: 'Исследователь',
   },
   avatar: {
     type: String,
-    default: "https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png",
-    validate:{
+    default: 'https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png',
+    validate: {
       validator: (v:string) => validator.isURL(v),
-      message: 'Неправильный формат ссылки'
+      message: 'Неправильный формат ссылки',
     },
   },
   email: {
@@ -51,19 +51,19 @@ const userSchema = new Schema<IUser, UserModel>({
 
 userSchema.static('findUserByCredentials', function findUserByCredentials(email: string, password: string) {
   return this.findOne({ email }).select('+password')
-  .then((user) => {
-    if (!user) {
-      return Promise.reject(new Error('Неправильные почта или пароль'));
-    }
-
-    return bcrypt.compare(password, user.password)
-    .then((matched) => {
-      if (!matched) {
+    .then((user) => {
+      if (!user) {
         return Promise.reject(new Error('Неправильные почта или пароль'));
       }
-      return user;
+
+      return bcrypt.compare(password, user.password)
+        .then((matched) => {
+          if (!matched) {
+            return Promise.reject(new Error('Неправильные почта или пароль'));
+          }
+          return user;
+        });
     });
-  });
 });
 
 export default mongoose.model<IUser, UserModel>('User', userSchema);

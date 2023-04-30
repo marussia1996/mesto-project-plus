@@ -7,13 +7,11 @@ export interface SessionRequest extends Request {
 
 const handleAuthError = (res: Response) => {
   res
-  .status(401)
-  .send({ message: 'Необходима авторизация' });
+    .status(401)
+    .send({ message: 'Необходима авторизация' });
 };
 
-const extractBearerToken = (header: string) => {
-  return header.replace('Bearer ', '');
-};
+const extractBearerToken = (header: string) => header.replace('Bearer ', '');
 
 export default (req: SessionRequest, res: Response, next: NextFunction) => {
   const { authorization } = req.headers;
