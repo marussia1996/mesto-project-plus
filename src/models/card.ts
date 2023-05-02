@@ -1,4 +1,5 @@
 import mongoose, { Schema } from 'mongoose';
+import avatarRegExp from '../constants/avatarRegExp';
 
 interface ICard {
   name: string;
@@ -14,10 +15,18 @@ const cardSchema = new Schema<ICard>({
     minlength: 2,
     maxlength: 30,
     required: true,
+    validate: {
+      validator: (v: string) => v.length > 2 && v.length < 30,
+      message: 'Текст должен быть от 2 до 30 символов',
+    },
   },
   link: {
     type: String,
     required: true,
+    validate: {
+      validator: (v: string) => avatarRegExp.test(v),
+      message: 'Ссылка некорректна',
+    },
   },
   owner: {
     type: Schema.Types.ObjectId,

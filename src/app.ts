@@ -1,11 +1,12 @@
 import mongoose from 'mongoose';
 import express from 'express';
+import { errors } from 'celebrate';
 import indexRouter from './routes/index';
+import { createUserValidation, loginValidation } from './validation/userValidation';
 import { createUser, login } from './controllers/users';
 import auth from './middleware/auth';
 import errorHandler from './middleware/error';
 import { errorLogger, requestLogger } from './middleware/logger';
-import { errors } from 'celebrate';
 
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -21,9 +22,9 @@ mongoose.connect('mongodb://127.0.0.1:27017/mestodb', {
 
 app.use(requestLogger); // подключаем логер запросов
 
-app.post('/signin', login);
+app.post('/signin', loginValidation, login);
 
-app.post('/signup', createUser);
+app.post('/signup', createUserValidation, createUser);
 
 //  защищаем все роуты кроме страницы регистрации и логина
 app.use(auth);

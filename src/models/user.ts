@@ -1,6 +1,7 @@
 import mongoose, { Document, Model, Schema } from 'mongoose';
 import validator from 'validator';
 import bcrypt from 'bcryptjs';
+import avatarRegExp from '../constants/avatarRegExp';
 
 interface IUser {
   name: string;
@@ -18,19 +19,27 @@ const userSchema = new Schema<IUser, UserModel>({
     minlength: 2,
     maxlength: 30,
     default: 'Жак-Ив Кусто',
+    validate: {
+      validator: (v: string) => v.length > 2 && v.length < 30,
+      message: 'Текст должен быть от 2 до 30 символов',
+    },
   },
   about: {
     type: String,
     minlength: 2,
     maxlength: 200,
     default: 'Исследователь',
+    validate: {
+      validator: (v: string) => v.length > 2 && v.length < 200,
+      message: 'Текст должен быть от 2 до 200 символов',
+    },
   },
   avatar: {
     type: String,
     default: 'https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png',
     validate: {
-      validator: (v:string) => validator.isURL(v),
-      message: 'Неправильный формат ссылки',
+      validator: (v: string) => avatarRegExp.test(v),
+      message: 'Ссылка некорректна',
     },
   },
   email: {
