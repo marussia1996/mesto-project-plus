@@ -14,6 +14,7 @@ const handleAuthError = (res: Response) => {
 
 const extractBearerToken = (header: string) => header.replace('Bearer ', '');
 
+/* eslint-disable-next-line */
 export default (req: SessionRequest, res: Response, next: NextFunction) => {
   const { authorization } = req.headers;
 
