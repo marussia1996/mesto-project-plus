@@ -38,8 +38,7 @@ export const createUser = (req: Request, res: Response, next: NextFunction) => {
     .catch((err) => {
       if (err.code === 11000) {
         res.status(CONFLICT_CODE).send({ message: 'Пользователь с переданным email уже существует' });
-      }
-      else {
+      } else {
         next(err);
       }
     });

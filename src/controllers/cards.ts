@@ -27,14 +27,15 @@ export const deleteCard = (req: IRequestCustom, res: Response, next: NextFunctio
   const owner = req.user?._id;
   return Card.findById(id)
     .orFail(() => new ErrorResponse('Карточка по указанному _id не найдена', NOT_FOUND_CODE))
-    .then((card)=>{
-      if(card.owner.toString() !== owner){
-        throw new ErrorResponse('Недостаточно прав для удаления', FORBIDDEN)
-      }
-      else{
+    .then((card) => {
+      if (card.owner.toString() !== owner) {
+        throw new ErrorResponse('Недостаточно прав для удаления', FORBIDDEN);
+      } else {
         Card.deleteOne(card._id)
           .then(() => res.send({ message: 'Пост удалён' }))
-          .catch((err) => next(err))
+          .catch((err) => {
+            next(err);
+          });
       }
     })
     .catch((err) => {
