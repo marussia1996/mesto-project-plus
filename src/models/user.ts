@@ -2,6 +2,8 @@ import mongoose, { Document, Model, Schema } from 'mongoose';
 import validator from 'validator';
 import bcrypt from 'bcryptjs';
 import avatarRegExp from '../constants/avatarRegExp';
+import ErrorResponse from '../utils/errorResponse';
+import { UNAUTHORIZED } from '../constants/statusCode';
 
 interface IUser {
   name: string;
@@ -21,20 +23,12 @@ const userSchema = new Schema<IUser, UserModel>({
     minlength: 2,
     maxlength: 30,
     default: 'Жак-Ив Кусто',
-    validate: {
-      validator: (v: string) => v.length > 2 && v.length < 30,
-      message: 'Текст должен быть от 2 до 30 символов',
-    },
   },
   about: {
     type: String,
     minlength: 2,
     maxlength: 200,
     default: 'Исследователь',
-    validate: {
-      validator: (v: string) => v.length > 2 && v.length < 200,
-      message: 'Текст должен быть от 2 до 200 символов',
-    },
   },
   avatar: {
     type: String,
@@ -64,17 +58,17 @@ userSchema.static('findUserByCredentials', function findUserByCredentials(email:
   return this.findOne({ email }).select('+password')
     .then((user) => {
       if (!user) {
-        return Promise.reject(new Error('Неправильные почта или пароль'));
+        return Promise.reject(new ErrorResponse('Неправильные почта или пароль', UNAUTHORIZED));
       }
 
       return bcrypt.compare(password, user.password)
         .then((matched) => {
           if (!matched) {
-            return Promise.reject(new Error('Неправильные почта или пароль'));
+            return Promise.reject(new ErrorResponse('Неправильные почта или пароль', UNAUTHORIZED));
           }
           return user;
         });
     });
 });
 
-export default mongoose.model<IUser, UserModel>('User', userSchema);
+export default mongoose.model<IUser, UserModel>('user', userSchema);

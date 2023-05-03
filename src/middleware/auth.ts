@@ -1,15 +1,14 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { UNAUTHORIZED } from '../constants/statusCode';
+import ErrorResponse from '../utils/errorResponse';
 
 export interface SessionRequest extends Request {
     user?: string | JwtPayload;
 }
 
 const handleAuthError = (res: Response) => {
-  res
-    .status(UNAUTHORIZED)
-    .send({ message: 'Необходима авторизация' });
+  throw new ErrorResponse('Необходима авторизация', UNAUTHORIZED)
 };
 
 const extractBearerToken = (header: string) => header.replace('Bearer ', '');

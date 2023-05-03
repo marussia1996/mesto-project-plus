@@ -25,12 +25,23 @@ export const createUser = (req: Request, res: Response, next: NextFunction) => {
       email,
       password: hash,
     }))
-    .then((user) => res.status(CREATED_CODE).send(user))
+    .then((user) => {
+      // через оператор delete не получается сделать, тк как пароль является обязательным полем
+      res.status(CREATED_CODE).send({
+        email: user.email,
+        name: user.name,
+        about: user.about,
+        avatar: user.avatar,
+        _id: user._id,
+      });
+    })
     .catch((err) => {
       if (err.code === 11000) {
         res.status(CONFLICT_CODE).send({ message: 'Пользователь с переданным email уже существует' });
       }
-      next(err);
+      else {
+        next(err);
+      }
     });
 };
 

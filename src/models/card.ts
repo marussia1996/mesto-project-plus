@@ -15,10 +15,6 @@ const cardSchema = new Schema<ICard>({
     minlength: 2,
     maxlength: 30,
     required: true,
-    validate: {
-      validator: (v: string) => v.length > 2 && v.length < 30,
-      message: 'Текст должен быть от 2 до 30 символов',
-    },
   },
   link: {
     type: String,
