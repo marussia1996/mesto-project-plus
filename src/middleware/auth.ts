@@ -14,9 +14,9 @@ export default (req: SessionRequest, res: Response, next: NextFunction) => {
   const { authorization } = req.headers;
 
   if (!authorization || !authorization.startsWith('Bearer ')) {
-    throw new ErrorResponse('Необходима авторизация', UNAUTHORIZED);
+    next( new ErrorResponse('Необходима авторизация', UNAUTHORIZED));
   }
-
+  else{
   const token = extractBearerToken(authorization);
   let payload;
 
@@ -27,6 +27,6 @@ export default (req: SessionRequest, res: Response, next: NextFunction) => {
   }
 
   req.user = payload as { _id: JwtPayload }; // записываем пейлоуд в объект запроса
-
   next(); // пропускаем запрос дальше
+  }
 };
